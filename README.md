@@ -36,7 +36,8 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   * This can be done with SELECT and WHERE clauses
   </details>
 
-```SQL
+```SQL 
+select * from customers where city = 'London';
 
 ```
 
@@ -48,6 +49,7 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   </details>
 
 ```SQL
+select * from customers where postal_code = '1010';
 
 ```
 
@@ -59,6 +61,7 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   </details>
 
 ```SQL
+select phone from suppliers where supplier_id = 11;
 
 ```
 
@@ -70,6 +73,7 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   </details>
 
 ```SQL
+select * from orders order by order_date desc;
 
 ```
 
@@ -82,6 +86,7 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   </details>
 
 ```SQL
+select * from suppliers where length(company_name) > 20;
 
 ```
 
@@ -95,6 +100,7 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   </details>
 
 ```SQL
+select * from customers where upper(contact_title) like '%MARKET%';
 
 ```
 
@@ -112,6 +118,8 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   </details>
 
 ```SQL
+insert into customers (customer_id, company_name, contact_name, address, city, postal_code, country)
+values ('SHIRE', 'The Shire', 'Bilbo Baggins', '1 Hobbit-Hole', 'Bag End', '111', 'Middle Earth');
 
 ```
 
@@ -123,6 +131,7 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   </details>
 
 ```SQL
+update customers set postal_code = '11122' where customer_id = 'SHIRE';
 
 ```
 
@@ -135,6 +144,12 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   </details>
 
 ```SQL
+select customers.company_name, count(orders.order_id) as order_count
+from orders
+left join customers
+on orders.customer_id = customers.customer_id
+group by customers.company_name
+order by customers.company_name;
 
 ```
 
@@ -146,6 +161,12 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   </details>
 
 ```SQL
+select customers.contact_name, count(orders.order_id) as order_count
+from orders
+left join customers
+on orders.customer_id = customers.customer_id
+group by customers.contact_name
+order by order_count desc;
 
 ```
 
@@ -157,6 +178,12 @@ Reimport the Northwind database into PostgreSQL using pgAdmin. This is the same 
   </details>
 
 ```SQL
+select customers.city, count(orders.order_id) as order_count 
+from orders
+left join customers
+on orders.customer_id = customers.customer_id
+group by customers.city
+order by customers.city;
 
 ```
 
@@ -178,38 +205,41 @@ Below are some empty tables to be used to normalize the database
 * Feel free to edit these tables as necessary
 
 Table Name:
+Person
 
-|            |            |            |            |            |            |            |            |            |
+|ID          |Name        |City_Dweller|Fenced_Yard |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+|0           |Jane        |T           |F           |            |            |            |            |            |
+|1           |Bob         |F           |F           |            |            |            |            |            |
+|2           |Sam         |F           |T           |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 
 Table Name:
+Pet
 
-|            |            |            |            |            |            |            |            |            |
+|ID          |Name        |Type_ID     |Owner_ID    |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+|0           |Ellie       |0           |0           |            |            |            |            |            |
+|1           |Tiger       |1           |0           |            |            |            |            |            |
+|2           |Toby        |2           |0           |            |            |            |            |            |
+|3           |Joe         |3           |1           |            |            |            |            |            |
+|4           |Ginger      |0           |2           |            |            |            |            |            |
+|5           |Miss Kitty  |2           |2           |            |            |            |            |            |
+|6           |Bubble      |4           |2           |            |            |            |            |            |
 
 Table Name:
+Pet_Type
 
-|            |            |            |            |            |            |            |            |            |
+|ID          |Name        |            |            |            |            |            |            |            |
 |------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+|0           |Dog         |            |            |            |            |            |            |            |
+|1           |Cat         |            |            |            |            |            |            |            |
+|2           |Turtle      |            |            |            |            |            |            |            |
+|3           |Horse       |            |            |            |            |            |            |            |
+|4           |Fish        |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 |            |            |            |            |            |            |            |            |            |
 
@@ -232,6 +262,14 @@ Table Name:
 * [ ] ***delete all customers that have no orders. Should delete 2 (or 3 if you haven't deleted the record added) records***
 
 ```SQL
+delete
+from customers
+where customers.customer_id in
+(select customers.customer_id
+from customers
+left join orders
+on customers.customer_id = orders.customer_id
+where orders.order_date is null);
 
 ```
 
@@ -250,6 +288,76 @@ Table Name:
   * account `budget` is required.
 
 ```SQL
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.3
+-- Dumped by pg_dump version 12.3
+
+-- Started on 2020-08-06 07:18:44
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 202 (class 1259 OID 16561)
+-- Name: accounts; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.accounts (
+    id integer NOT NULL,
+    name character varying[] NOT NULL,
+    budget numeric NOT NULL
+);
+
+
+ALTER TABLE public.accounts OWNER TO postgres;
+
+--
+-- TOC entry 2816 (class 0 OID 16561)
+-- Dependencies: 202
+-- Data for Name: accounts; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.accounts (id, name, budget) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2687 (class 2606 OID 16568)
+-- Name: accounts accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.accounts
+    ADD CONSTRAINT accounts_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2689 (class 2606 OID 16570)
+-- Name: accounts chk_unique_name; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.accounts
+    ADD CONSTRAINT chk_unique_name UNIQUE (name) INCLUDE (name);
+
+
+-- Completed on 2020-08-06 07:18:45
+
+--
+-- PostgreSQL database dump complete
 
 ```
 
